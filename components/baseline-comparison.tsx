@@ -21,13 +21,13 @@ export interface BaselineComparisonProps {
 // UI: a change is a physical difference, not a good or bad outcome.
 function Delta({ direction, children }: { direction: ChangeDirection; children: ReactNode }) {
   if (direction === "none") {
-    return <span className="text-base font-medium text-muted-foreground">No change</span>;
+    return <span className="text-base font-medium text-muted-foreground">변화 없음</span>;
   }
   const up = direction === "up";
   return (
     <span className="font-mono text-xl font-semibold tabular-nums">
       <span aria-hidden="true">{up ? "▲" : "▼"}</span>
-      <span className="sr-only">{up ? "Increased by " : "Decreased by "}</span> {children}
+      <span className="sr-only">{up ? "증가: " : "감소: "}</span> {children}
     </span>
   );
 }
@@ -47,7 +47,7 @@ function hours(value: number | null) {
 }
 
 function percentText(percent: number | null) {
-  return percent === null ? "n/a (baseline 0)" : `${percentFormat.format(Math.abs(percent))} %`;
+  return percent === null ? "해당 없음 (기준값 0)" : `${percentFormat.format(Math.abs(percent))} %`;
 }
 
 export function BaselineComparison({ comparison }: BaselineComparisonProps) {
@@ -57,22 +57,22 @@ export function BaselineComparison({ comparison }: BaselineComparisonProps) {
   return (
     <Card className="px-5 py-4">
       <div className="mb-3">
-        <h2 className="text-[15px] font-semibold">Change vs. baseline</h2>
+        <h2 className="text-[15px] font-semibold">기준 대비 변화</h2>
         <div className="mt-0.5 text-xs text-muted-foreground">
-          Baseline = default scenario. Physical differences only &mdash; no better or worse judgement.
+          기준 = 기본 시나리오. 물리적 차이만 표시하며 좋고 나쁨은 판단하지 않습니다.
         </div>
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
         <Item
-          label="Peak Q"
+          label="첨두유량"
           delta={<Delta direction={peakDischarge.direction}>{percentText(peakDischarge.percent)}</Delta>}
           detail={`${twoDecimals.format(peakDischarge.baseline)} → ${twoDecimals.format(peakDischarge.current)} m³/s`}
         />
         <Item
-          label="Lag"
+          label="지체시간"
           delta={
             lag.deltaHours === null ? (
-              <span className="text-base font-medium text-muted-foreground">n/a (no storm-response peak)</span>
+              <span className="text-base font-medium text-muted-foreground">해당 없음 (강우 반응 첨두 없음)</span>
             ) : (
               <Delta direction={lag.direction}>{Math.abs(lag.deltaHours)} h</Delta>
             )
@@ -80,7 +80,7 @@ export function BaselineComparison({ comparison }: BaselineComparisonProps) {
           detail={`${hours(lag.baselineHours)} → ${hours(lag.currentHours)}`}
         />
         <Item
-          label="Runoff volume"
+          label="유출량"
           delta={<Delta direction={runoffVolume.direction}>{percentText(runoffVolume.percent)}</Delta>}
           detail={`${thousandM3(runoffVolume.baseline)} → ${thousandM3(runoffVolume.current)} ×10³ m³`}
         />

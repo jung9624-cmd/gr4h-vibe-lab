@@ -6,7 +6,7 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { EDUCATIONAL_RANGE_DISCLAIMER, PARAMETER_RANGES, type AdjustableParameter } from "@/lib/storm";
 
-// The control panel is in Korean; the rest of the dashboard is still English.
+// UI copy is Korean; parameter symbols (x1..x4, ps0, rs0) and SI units are kept.
 
 export interface ParameterValues {
   areaKm2: number;
@@ -149,7 +149,6 @@ export function ParameterPanel({ values, onChange, onReset }: ParameterPanelProp
 
   return (
     <aside
-      lang="ko"
       aria-label="실험 조건"
       className="flex w-full shrink-0 flex-col border-b px-4 py-4 sm:px-6 lg:w-[300px] lg:border-r lg:border-b-0 lg:py-[22px]"
     >

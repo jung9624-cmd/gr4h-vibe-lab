@@ -39,8 +39,8 @@ const BASELINE = (() => {
 })();
 
 function lagNote(peakPrecedesRainfall: boolean, totalRainfallMm: number) {
-  if (peakPrecedesRainfall) return "Peak precedes rainfall: initial-store drainage, not a storm response";
-  if (totalRainfallMm === 0) return "No rainfall";
+  if (peakPrecedesRainfall) return "첨두가 강우보다 먼저 발생: 초기 저류 배수이며 강우 반응이 아님";
+  if (totalRainfallMm === 0) return "강우 없음";
   return undefined;
 }
 
@@ -103,14 +103,14 @@ export function Gr4hDashboard() {
           <div>
             <h1 className="text-xl font-semibold">GR4H Vibe Lab</h1>
             <div className="mt-0.5 text-[13px] text-muted-foreground">
-              Hourly Rainfall&ndash;Runoff Playground
+              시간단위 강우&ndash;유출 실험실
             </div>
           </div>
         </div>
         <div className="sm:text-right">
-          <div className="text-[11px] tracking-wide text-muted-foreground uppercase">Reference Model</div>
+          <div className="text-[11px] tracking-wide text-muted-foreground uppercase">참조 모형</div>
           <div className="mt-0.5 text-[15px] font-semibold">GR4H</div>
-          <div className="mt-0.5 font-mono text-xs text-muted-foreground">1-hour timestep</div>
+          <div className="mt-0.5 font-mono text-xs text-muted-foreground">1시간 간격</div>
         </div>
       </header>
 
@@ -136,26 +136,26 @@ export function Gr4hDashboard() {
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <MetricCard
               icon={CloudRain}
-              label="Total Rainfall"
+              label="총강우량"
               value={metrics.totalRainfallMm.toFixed(1)}
               unit="mm"
             />
             <MetricCard
               icon={TrendingUp}
-              label="Peak Discharge"
+              label="첨두유량"
               value={metrics.peakDischargeCms.toFixed(2)}
               unit="m³/s"
             />
             <MetricCard
               icon={Clock}
-              label="Peak Lag"
+              label="첨두 지체시간"
               value={metrics.lagHours === null ? "—" : String(metrics.lagHours)}
               unit="h"
               note={lagNote(metrics.peakPrecedesRainfall, metrics.totalRainfallMm)}
             />
             <MetricCard
               icon={Percent}
-              label="Runoff Ratio"
+              label="유출률"
               value={(metrics.runoffRatio * 100).toFixed(1)}
               unit="%"
             />
@@ -165,9 +165,9 @@ export function Gr4hDashboard() {
 
           <Card className="p-4 sm:p-5">
             <div className="mb-2.5">
-              <h2 className="text-[15px] font-semibold">x4 Sensitivity Experiment</h2>
+              <h2 className="text-[15px] font-semibold">x4 민감도 실험</h2>
               <div className="mt-0.5 text-xs text-muted-foreground">
-                x4/2, x4, and 2&times;x4 &mdash; all other parameters held fixed at their current values
+                x4/2, x4, 2&times;x4 &mdash; 나머지 매개변수는 현재 값으로 고정
               </div>
             </div>
             <div className="flex flex-col gap-5 md:flex-row">
@@ -199,7 +199,7 @@ export function Gr4hDashboard() {
           />
 
           <footer className="space-y-1 pt-1 text-center text-xs text-muted-foreground">
-            <p>
+            <p lang="en">
               Based on the open-source GR4H implementation by{" "}
               <a
                 href="https://github.com/crdykman/GR4H"
@@ -212,8 +212,9 @@ export function Gr4hDashboard() {
               . Educational demonstration.
             </p>
             <p>
-              GR4H is an hourly adaptation of the GR4J model (Perrin et al., 2003; Mathevet, 2005). This page
-              re-implements it in TypeScript and runs entirely in your browser.
+              오픈소스 GR4H 구현(crdykman)을 바탕으로 한 교육용 시연입니다. GR4H는 GR4J 모형의 시간단위 개량판
+              (Perrin et al., 2003; Mathevet, 2005)이며, 이 페이지는 이를 TypeScript로 다시 구현해 브라우저에서만
+              계산합니다.
             </p>
           </footer>
         </main>

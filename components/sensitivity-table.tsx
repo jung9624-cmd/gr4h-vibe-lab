@@ -13,17 +13,17 @@ export interface SensitivityTableProps {
 export function SensitivityTable({ rows }: SensitivityTableProps) {
   return (
     <table className="w-full border-collapse text-[13px]">
-      <caption className="sr-only">Peak discharge and lag for x4/2, x4 and 2×x4</caption>
+      <caption className="sr-only">x4/2, x4, 2×x4 각각의 첨두유량과 지체시간</caption>
       <thead>
         <tr className="border-b">
           <th scope="col" className="px-0 py-1.5 pr-2 text-left text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
-            Case
+            경우
           </th>
           <th scope="col" className="px-2 py-1.5 text-right font-mono text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
-            Peak Q
+            첨두유량
           </th>
           <th scope="col" className="py-1.5 pl-2 text-right font-mono text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
-            Lag
+            지체
           </th>
         </tr>
       </thead>

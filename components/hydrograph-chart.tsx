@@ -109,30 +109,30 @@ export function HydrographChart({
   const xTicks = [0, 12, 24, 36, 48, 60, 72].filter((h) => h <= lastHour);
 
   const summary =
-    `Hydrograph over ${data.length} hours. ` +
+    `${data.length}시간 수문곡선. ` +
     (rainPeakHour !== null
-      ? `Rainfall peaks at hour ${rainPeakHour} at ${rainPeakValue.toFixed(1)} millimetres per hour. `
-      : "No rainfall. ") +
-    `Peak discharge is ${qPeakValue.toFixed(2)} cubic metres per second at hour ${qPeakHour}.`;
+      ? `강우 첨두는 ${rainPeakHour}시, ${rainPeakValue.toFixed(1)} mm/h입니다. `
+      : "강우가 없습니다. ") +
+    `첨두유량은 ${qPeakHour}시, ${qPeakValue.toFixed(2)} m³/s입니다.`;
 
   return (
     <Card className="p-4 sm:p-[22px]">
       <div className="mb-3 flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
         <div>
-          <h2 className="text-[15px] font-semibold">Hydrograph</h2>
-          <div className="mt-0.5 text-xs text-muted-foreground">Model response to the controls</div>
+          <h2 className="text-[15px] font-semibold">수문곡선</h2>
+          <div className="mt-0.5 text-xs text-muted-foreground">조건 변경에 대한 모형 반응</div>
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-          <LegendSwatch color={PRECIP_FILL} label="Precipitation" square />
-          <LegendSwatch color={TOTAL_Q} label="Total Q" bold />
-          <LegendSwatch color={DIRECT_Q} label="Direct Q" />
-          <LegendSwatch color={BASE_Q} label="Routing/Base Q" />
-          <LegendSwatch color={BASELINE_Q} label="Baseline Total Q" dashed />
+          <LegendSwatch color={PRECIP_FILL} label="강수량" square />
+          <LegendSwatch color={TOTAL_Q} label="총유량 Q" bold />
+          <LegendSwatch color={DIRECT_Q} label="직접유출 Q" />
+          <LegendSwatch color={BASE_Q} label="추적저류·기저유출 Q" />
+          <LegendSwatch color={BASELINE_Q} label="기준 시나리오 총유량" dashed />
         </div>
       </div>
       <p className="sr-only">{summary}</p>
 
-      {/* Precipitation — inverted axis: 0 at the top, bars hang down toward the hydrograph */}
+      {/* 강수량 — 반전 축: 0이 위, 막대가 수문곡선 쪽으로 매달림 */}
       <div className="h-[110px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} syncId="hydrograph" margin={{ top: LABEL_HEADROOM, bottom: 4, ...SIDE_MARGIN }}>
@@ -148,7 +148,7 @@ export function HydrographChart({
               tickLine={false}
             />
             <Tooltip
-              formatter={(value: unknown) => [`${Number(value).toFixed(1)} mm/h`, "Precipitation"]}
+              formatter={(value: unknown) => [`${Number(value).toFixed(1)} mm/h`, "강수량"]}
               labelFormatter={(label: unknown) => hourTick(Number(label))}
             />
             <Bar
@@ -165,7 +165,7 @@ export function HydrographChart({
                 strokeWidth={1.25}
                 strokeDasharray="2 3"
                 label={{
-                  value: `Rain Peak ${rainPeakHour}:00`,
+                  value: `강우 첨두 ${rainPeakHour}시`,
                   position: "top",
                   fontSize: 11,
                   fill: "#3f3f3c",
@@ -213,10 +213,10 @@ export function HydrographChart({
             <Tooltip
               formatter={(value: unknown, name: unknown) => {
                 const labels: Record<string, string> = {
-                  qt: "Total Q",
-                  qd: "Direct Q",
-                  qb: "Routing/Base Q",
-                  baselineQt: "Baseline Total Q",
+                  qt: "총유량 Q",
+                  qd: "직접유출 Q",
+                  qb: "추적저류·기저유출 Q",
+                  baselineQt: "기준 시나리오 총유량",
                 };
                 return [`${Number(value).toFixed(2)} m³/s`, labels[String(name)] ?? String(name)];
               }}
@@ -231,7 +231,7 @@ export function HydrographChart({
               strokeWidth={1.5}
               strokeDasharray="5 3"
               label={{
-                value: `Q Peak ${qPeakHour}:00`,
+                value: `유량 첨두 ${qPeakHour}시`,
                 position: "top",
                 fontSize: 11,
                 fontWeight: 600,
