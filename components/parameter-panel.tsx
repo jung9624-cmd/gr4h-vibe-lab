@@ -4,12 +4,9 @@ import { useId, useState } from "react";
 import { ChevronDown, SlidersHorizontal, RotateCcw } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
-import { PARAMETER_RANGES, type AdjustableParameter } from "@/lib/storm";
+import { EDUCATIONAL_RANGE_DISCLAIMER, PARAMETER_RANGES, type AdjustableParameter } from "@/lib/storm";
 
-// lib/storm.ts's EDUCATIONAL_RANGE_DISCLAIMER carries the Korean-language
-// disclaimer required alongside PARAMETER_RANGES; the finalized Pencil
-// design (design/gr4h-dashboard.pen) renders the same disclaimer in the
-// dashboard's own English UI copy, shown below.
+// The control panel is in Korean; the rest of the dashboard is still English.
 
 export interface ParameterValues {
   areaKm2: number;
@@ -32,12 +29,12 @@ export interface ParameterPanelProps {
 // Shown under the slider being adjusted. Statements of what the parameter
 // represents, not of what a "good" value is.
 const PARAMETER_MEANINGS: Partial<Record<AdjustableParameter, string>> = {
-  x1: "Production store capacity",
-  x2: "Groundwater exchange coefficient",
-  x3: "Routing store capacity",
-  x4: "Unit hydrograph time base",
-  ps0: "Initial production-store saturation",
-  rs0: "Initial routing-store saturation",
+  x1: "생산저류 용량",
+  x2: "지하수 교환 계수",
+  x3: "추적저류 용량",
+  x4: "단위도 시간기저",
+  ps0: "생산저류 초기 포화도",
+  rs0: "추적저류 초기 포화도",
 };
 
 interface RowSpec {
@@ -50,27 +47,27 @@ interface RowSpec {
 
 const GROUPS: { title: string; rows: RowSpec[] }[] = [
   {
-    title: "Catchment",
+    title: "유역",
     rows: [
-      { param: "areaKm2", label: "Area", unit: "km²" },
-      { param: "rainfallMultiplier", label: "Rainfall multiplier", unit: "×", decimals: 1 },
-      { param: "petMmPerHour", label: "PET", unit: "mm/h", decimals: 2 },
+      { param: "areaKm2", label: "유역면적", unit: "km²" },
+      { param: "rainfallMultiplier", label: "강우 배율", unit: "×", decimals: 1 },
+      { param: "petMmPerHour", label: "잠재증발산 PET", unit: "mm/h", decimals: 2 },
     ],
   },
   {
-    title: "Model Parameters",
+    title: "모형 매개변수",
     rows: [
-      { param: "x1", label: "x1", description: "Production Store", unit: "mm" },
-      { param: "x2", label: "x2", description: "Groundwater Exchange", unit: "mm", decimals: 1 },
-      { param: "x3", label: "x3", description: "Routing Store", unit: "mm" },
-      { param: "x4", label: "x4", description: "UH Time Base", unit: "h", decimals: 1 },
+      { param: "x1", label: "x1", description: "생산저류", unit: "mm" },
+      { param: "x2", label: "x2", description: "지하수 교환", unit: "mm", decimals: 1 },
+      { param: "x3", label: "x3", description: "추적저류", unit: "mm" },
+      { param: "x4", label: "x4", description: "UH 시간기저", unit: "h", decimals: 1 },
     ],
   },
   {
-    title: "Initial Condition",
+    title: "초기 조건",
     rows: [
-      { param: "ps0", label: "ps0", description: "Production Storage", unit: "× x1", decimals: 2 },
-      { param: "rs0", label: "rs0", description: "Routing Storage", unit: "× x3", decimals: 2 },
+      { param: "ps0", label: "ps0", description: "초기 생산저류", unit: "× x1", decimals: 2 },
+      { param: "rs0", label: "rs0", description: "초기 추적저류", unit: "× x3", decimals: 2 },
     ],
   },
 ];
@@ -119,8 +116,8 @@ function SliderRow({ param, label, description, unit, decimals = 0, value, activ
 
 function summarize(v: ParameterValues) {
   return [
-    `Area ${v.areaKm2} km²`,
-    `Rain ×${v.rainfallMultiplier.toFixed(1)}`,
+    `유역면적 ${v.areaKm2} km²`,
+    `강우 ×${v.rainfallMultiplier.toFixed(1)}`,
     `PET ${v.petMmPerHour.toFixed(2)}`,
     `x1 ${v.x1}`,
     `x2 ${v.x2.toFixed(1)}`,
@@ -146,13 +143,14 @@ export function ParameterPanel({ values, onChange, onReset }: ParameterPanelProp
   const title = (
     <>
       <SlidersHorizontal className="size-4" strokeWidth={2} />
-      Experiment Controls
+      실험 조건
     </>
   );
 
   return (
     <aside
-      aria-label="Experiment controls"
+      lang="ko"
+      aria-label="실험 조건"
       className="flex w-full shrink-0 flex-col border-b px-4 py-4 sm:px-6 lg:w-[300px] lg:border-r lg:border-b-0 lg:py-[22px]"
     >
       <h2 className="hidden items-center gap-2 text-sm font-semibold lg:flex">{title}</h2>
@@ -171,7 +169,7 @@ export function ParameterPanel({ values, onChange, onReset }: ParameterPanelProp
       {!open && (
         <div className="mt-2 lg:hidden">
           <p className="font-mono text-xs leading-5 text-muted-foreground">{summarize(values)}</p>
-          <p className="mt-1 text-xs text-muted-foreground">Teaching ranges only &mdash; not calibration bounds.</p>
+          <p className="mt-1 text-xs text-muted-foreground">{EDUCATIONAL_RANGE_DISCLAIMER}</p>
         </div>
       )}
 
@@ -206,10 +204,10 @@ export function ParameterPanel({ values, onChange, onReset }: ParameterPanelProp
 
         <Button variant="outline" size="sm" className="w-full gap-2" onClick={handleReset}>
           <RotateCcw className="size-3.5" />
-          Reset
+          초기화
         </Button>
         <div className="text-xs leading-tight text-muted-foreground">
-          Teaching ranges only &mdash; not calibration bounds.
+          {EDUCATIONAL_RANGE_DISCLAIMER}
         </div>
       </div>
     </aside>
