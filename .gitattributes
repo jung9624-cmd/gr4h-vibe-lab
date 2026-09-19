@@ -1,0 +1,2 @@
+# Byte-exact copy of the upstream source; tests verify its sha256.
+reference/GR4H_model.py -text
